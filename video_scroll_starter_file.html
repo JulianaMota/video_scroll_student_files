@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="">
-<!--
+  <!--
 
 KEYWORDS!
 
@@ -15,43 +15,77 @@ canplaythrough event
 duration
 currentTime
 -->
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Scroll in video</title>
     <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      .outerVideoContainer {
+        width: 768px;
+        overflow: scroll;
+      }
 
-        .outerVideoContainer {
+      .innerVideoContainer {
+        width: 3000px;
+      }
 
-        }
-
-        .innerVideoContainer {
-
-
-
-        }
-
-        video {
-
-
-        }
-
-
+      video {
+        position: sticky;
+        left: 0;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div class="outerVideoContainer">
-        <div class="innerVideoContainer">
-            <video src="video/theVideo.mp4" width="768" height="432"></video>
-        </div>
+      <div class="innerVideoContainer">
+        <video
+          id="video"
+          src="video/theVideo.mp4"
+          width="768"
+          height="432"
+        ></video>
+      </div>
     </div>
 
     <script>
+      let video = document.getElementById("video");
+      video.addEventListener("canplaythrough", videoReady);
 
+      function videoReady() {
+        let videoDistance = video.duration;
+        console.log(videoDistance);
+      }
 
+      let scrollDistance =
+        document.querySelector(".outerVideoContainer").scrollWidth -
+        document.querySelector(".outerVideoContainer").clientWidth;
+      console.log("scrollDistance", scrollDistance);
+      document
+        .querySelector(".outerVideoContainer")
+        .addEventListener("scroll", scrollFunc);
 
+      function scrollFunc(evt) {
+        console.log(evt.target.scrollLeft);
+
+        let scrollLeft = evt.target.scrollLeft;
+        video.currentTime = (scrollLeft / scrollDistance) * video.duration;
+        console.log(video.currentTime);
+        console.log("scrollDistance", scrollDistance);
+        console.log(
+          "scrollwidth",
+          document.querySelector(".outerVideoContainer").scrollWidth
+        );
+        console.log(
+          "outerDiv clientwidth",
+          document.querySelector(".outerVideoContainer").clientWidth
+        );
+        console.log("Scrollleft", evt.target.scrollLeft);
+      }
     </script>
-</body>
-
+  </body>
 </html>
